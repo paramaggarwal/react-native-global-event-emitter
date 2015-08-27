@@ -10,19 +10,25 @@ Uses iOS `NotificationCenter` and RN `DeviceEventEmitter` to provide a seamless 
 ## Usage
 
 ```javascript
-// 60fps updates
-DeviceMotion.startDeviceMotionUpdates(1000/60, (data) => {
-  console.log('Raw motion data: ', data);
+
+// listen to event posted to NSNotificationCenter by native code
+var eventName = GlobalEventEmitter.UIApplicationNotifications.UIApplicationDidEnterBackgroundNotification;
+GlobalEventEmitter.addListener(eventName, (data) => {
+    console.log('UIApplicationDidEnterBackgroundNotification');
 });
 
-// when done,
-DeviceMotion.stopDeviceMotionUpdates();
+// event available on NSNotificationCenter for native code
+var eventName = "UserDidLoginFromJS"
+GlobalEventEmitter.emit(eventName, {name: 'John'});
+
 ```
 
 ## Properties
 
-* `startDeviceMotionUpdates`: Pass an interval in `ms` and a callback to call with data.
-* `stopDeviceMotionUpdates`: Call to stop listening for events.
+* `addListener`: Add a listener for an `eventName` and pass a `callback` function.
+* `emit`: Emit events to native/JS globally.
+* `removeListener`: Remove a listener by passing the `eventName` and the reference to the original `callback` function.
+* `removeAllListeners`: Stop listening to all events of a particular `eventName`.
 
 ## Installation
 
@@ -32,9 +38,9 @@ Use your preferred method of including the library in your app.
 Try the included example:
 
 ```sh
-git clone git@github.com:paramaggarwal/react-native-device-motion.git
+git clone git@github.com:paramaggarwal/react-native-global-event-emitter.git
 npm install
-open iOS/RNTDeviceMotion.xcodeproj
+open iOS/RNTGlobalEventEmitter.xcodeproj
 ```
 
 Then `Cmd+R` to start the React Packager, build and run the project in the simulator.
