@@ -20,7 +20,14 @@ DeviceEventEmitter.addListener('onNotification', (data) => {
 });
 
 function addListener(eventName, callback) {
-  listeners[eventName] = listeners[eventName] ? listeners[eventName].push(callback) : [callback];
+  var callBacks = [];
+  if (listeners[eventName]) {
+    callBacks = listeners[eventName];
+  }
+
+  callBacks.push(callback);
+
+  listeners[eventName] = callBacks;
   RNTGlobalEventEmitter.addObserver(eventName);
 };
 
