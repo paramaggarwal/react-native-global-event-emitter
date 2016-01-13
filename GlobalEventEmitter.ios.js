@@ -49,9 +49,6 @@ function removeListener(eventName, callbackRef) {
 function removeAllListeners(eventName) {
   RNTGlobalEventEmitter.removeObserver(eventName);
   delete listeners[eventName];
-  if (!listeners.length) {
-      DeviceEventEmitter.removeAllListeners('onNotification');
-  };
 }
 
 var DeviceMotion = {
