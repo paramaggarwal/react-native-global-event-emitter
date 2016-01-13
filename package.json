@@ -1,6 +1,6 @@
 {
   "name": "react-native-global-event-emitter",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "description": "Shared event emitter between native and JS for React Native.",
   "main": "GlobalEventEmitter.ios.js",
   "scripts": {
