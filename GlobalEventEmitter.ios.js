@@ -12,7 +12,6 @@ var listeners = {};
 DeviceEventEmitter.addListener('onNotification', (data) => {
   var notifName = data.name;
   var notifData = data.userInfo;
-
   for (var i=0; i<listeners[notifName].length; i++) {
     var listener = listeners[notifName][i];
     listener(notifData);
@@ -20,15 +19,14 @@ DeviceEventEmitter.addListener('onNotification', (data) => {
 });
 
 function addListener(eventName, callback) {
-  var callBacks = [];
   if (listeners[eventName]) {
-    callBacks = listeners[eventName];
+    listeners[eventName].push(callback);
   }
-
-  callBacks.push(callback);
-
-  listeners[eventName] = callBacks;
-  RNTGlobalEventEmitter.addObserver(eventName);
+  else {
+    listeners[eventName] = [callback];
+    RNTGlobalEventEmitter.addObserver(eventName);
+  }
+  return listeners[eventName].indexOf(callback);
 };
 
 function emit(eventName, data) {
@@ -46,12 +44,13 @@ function removeListener(eventName, callbackRef) {
   };
 }
 
+function removeListenderById(eventName, Id) {
+  listeners[eventName].splice(Id, 1);
+}
+
 function removeAllListeners(eventName) {
   RNTGlobalEventEmitter.removeObserver(eventName);
   delete listeners[eventName];
-  if (!listeners.length) {
-      DeviceEventEmitter.removeAllListeners('onNotification');
-  };
 }
 
 var DeviceMotion = {
@@ -59,6 +58,7 @@ var DeviceMotion = {
   emit,
   removeListener,
   removeAllListeners,
+  removeListenderById
 };
 
 DeviceMotion.UIApplicationNotifications = RNTGlobalEventEmitter.UIApplicationNotifications;
